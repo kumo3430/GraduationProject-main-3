@@ -51,7 +51,7 @@ struct AddDietView: View {
     @State private var recurringOption = 1
     @State private var recurringEndDate = Date()
     @State private var selectedDiets = "減糖"
-    @State private var dietsUnit = "每日"
+    @State private var recurringUnit = "每日"
     @State private var dietsValue: Int = 0
     @State var messenge = ""
     @State var isError = false
@@ -190,10 +190,6 @@ struct AddDietView: View {
                     .padding(.horizontal)
                 }
                 
-                
-                
-                
-                
                 Section {
                     HStack {
                         Image(systemName: "arrow.clockwise")
@@ -218,15 +214,6 @@ struct AddDietView: View {
                 TextField("備註", text: $todoNote)
             }
             .navigationBarTitle("飲食")
-//            .navigationBarItems(leading:
-//                                    Button(action: {
-//                presentationMode.wrappedValue.dismiss()
-//            }) {
-//                Text("返回")
-//                    .foregroundColor(.blue)
-//            },
-//                                trailing: Button("完成", action: addTodo))
-//            .disabled(todoTitle.isEmpty && todoIntroduction.isEmpty))
             .navigationBarItems(leading:
                                     Button(action: {
                                         presentationMode.wrappedValue.dismiss()
@@ -237,9 +224,6 @@ struct AddDietView: View {
                 trailing: Button("完成", action: addTodo)
                 .disabled(todoTitle.isEmpty && todoIntroduction.isEmpty))
             
-        }
-        .onAppear {
-//            dietsUnit = dietsUnitsByType["減糖"]!.first!
         }
     }
     
@@ -254,66 +238,6 @@ struct AddDietView: View {
         formatter.dateFormat = "HH:MM"
         return formatter.string(from: date)
     }
-    
-//    func addTodo() {
-//        class URLSessionSingleton {
-//            static let shared = URLSessionSingleton()
-//            let session: URLSession
-//            private init() {
-//                let config = URLSessionConfiguration.default
-//                config.httpCookieStorage = HTTPCookieStorage.shared
-//                config.httpCookieAcceptPolicy = .always
-//                session = URLSession(configuration: config)
-//            }
-//        }
-//
-//        let url = URL(string: "http://localhost:8888/addTask/addDiet.php")!
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        let body = ["category_id": category_id,
-//                    "label": label,
-//                    "todoTitle": todoTitle,
-//                    "todoIntroduction": todoIntroduction,
-//                    "startDateTime": formattedDate(startDateTime),
-//                    "reminderTime": formattedTime(reminderTime),
-//                    "todoNote": todoNote] as [String : Any]
-//        let jsonData = try! JSONSerialization.data(withJSONObject: body, options: [])
-//        request.httpBody = jsonData
-//        URLSessionSingleton.shared.session.dataTask(with: request) { data, response, error in
-//            if let error = error {
-//                print("addTodo - Connection error: \(error)")
-//            } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-//                print("addTodo - HTTP error: \(httpResponse.statusCode)")
-//            }
-//            else if let data = data{
-//                let decoder = JSONDecoder()
-//                do {
-//                    let todoData = try decoder.decode(TodoData.self, from: data)
-//                    if (todoData.message == "User New Todo successfully") {
-//                        DispatchQueue.main.async {
-//                            //                            let todo = Todo(id: Int(todoData.todo_id)!,
-//                            //                                            label: label,
-//                            //                                            title: todoTitle,
-//                            //                                            description: todoIntroduction,
-//                            //                                            startDateTime: startDateTime,
-//                            //                                            todoStatus: todoStatus,
-//                            //                                            dueDateTime: dueDateTime,
-//                            //                                            reminderTime: reminderTime,
-//                            //                                            todoNote: todoNote)
-//                            //                            todoStore.todos.append(todo)
-//                            presentationMode.wrappedValue.dismiss()
-//                        }
-//                    } else {
-//                        print("addTodo - message：\(todoData.message)")
-//                        // handle other messages from the server
-//                    }
-//                } catch {
-//                    print("addTodo - 解碼失敗：\(error)")
-//                }
-//            }
-//        }
-//        .resume()
-//    }
     func addTodo() {
         class URLSessionSingleton {
             static let shared = URLSessionSingleton()
@@ -396,7 +320,7 @@ struct AddDietView: View {
                                         startDateTime: startDateTime,
                                         selectedDiets: selectedDiets,
                                         dietsValue: dietsValue,
-                                        dietsUnit: selectedTimeUnit,
+                                        recurringUnit: selectedTimeUnit,
                                         recurringOption: recurringOption,
                                         todoStatus: todoStatus,
                                         dueDateTime: recurringEndDate,

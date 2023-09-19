@@ -265,9 +265,14 @@ struct AddSportView: View {
             "reminderTime": formattedTime(reminderTime),
             "todoNote": todoNote
         ]
-        
-        if isRecurring {
-            body["frequency"] = selectedFrequency
+        if selectedTimeUnit == "每日" {
+            body["frequency"] = 1
+        } else if selectedTimeUnit == "每週" {
+            body["frequency"] = 2
+        } else if selectedTimeUnit == "每月" {
+            body["frequency"] = 3
+        }
+
             if recurringOption == 1 {
                 // 持續重複
                 body["dueDateTime"] = formattedDate(Calendar.current.date(byAdding: .year, value: 5, to: recurringEndDate)!)
@@ -275,11 +280,7 @@ struct AddSportView: View {
                 // 選擇結束日期
                 body["dueDateTime"] = formattedDate(recurringEndDate)
             }
-        } else {
-            // 不重複
-            body["frequency"] = 0
-            body["dueDateTime"] = formattedDate(recurringEndDate)
-        }
+
         
         print("AddTodoView - body:\(body)")
         let jsonData = try! JSONSerialization.data(withJSONObject: body, options: [])
@@ -326,9 +327,8 @@ struct AddSportView: View {
                                         selectedSport: selectedSport,
                                         sportValue: sportValue,
                                         sportUnits: sportUnit,
-                                        isRecurring: isRecurring,
+                                        recurringUnit: selectedTimeUnit,
                                         recurringOption: recurringOption,
-                                        selectedFrequency: selectedFrequency,
                                         todoStatus: todoStatus,
                                         dueDateTime: recurringEndDate,
                                         reminderTime: reminderTime,

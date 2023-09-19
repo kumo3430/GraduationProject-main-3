@@ -111,59 +111,59 @@ struct DetailSportView: View {
                     }
                 }
 
-                Section {
-                    if sport.isRecurring {
-                        HStack {
-                            Image(systemName: "arrow.clockwise")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.white)
-                                .padding(6)
-                                .background(Color.gray)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .frame(width: 30, height: 30)
-                            Text("重複頻率")
-                            Spacer()
-                            if (sport.selectedFrequency == 1){
-                                Text("每日")
-                            } else if (sport.selectedFrequency == 2) {
-                                Text("每週")
-                            } else if (sport.selectedFrequency == 3) {
-                                Text("每月")
-                            }
-                        }
-                        HStack {
-                            Image(systemName: "arrow.clockwise")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.white)
-                                .padding(6)
-                                .background(Color.gray)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .frame(width: 30, height: 30)
-                            Text("結束重複")
-                            Spacer()
-                            if (sport.recurringOption == 1){
-                                Text("一直重複")
-                            } else if (sport.recurringOption == 2) {
-                                Text(formattedDate(sport.dueDateTime))
-                            }
-                        }
-                    } else {
-                        HStack {
-                            Image(systemName: "arrow.clockwise")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.white)
-                                .padding(6)
-                                .background(Color.gray)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .frame(width: 30, height: 30)
-                            Spacer()
-                            Text("不重複")
-                        }
-                    }
-                }
+//                Section {
+//                    if sport.isRecurring {
+//                        HStack {
+//                            Image(systemName: "arrow.clockwise")
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fit)
+//                                .foregroundColor(.white)
+//                                .padding(6)
+//                                .background(Color.gray)
+//                                .clipShape(RoundedRectangle(cornerRadius: 8))
+//                                .frame(width: 30, height: 30)
+//                            Text("重複頻率")
+//                            Spacer()
+//                            if (sport.selectedFrequency == 1){
+//                                Text("每日")
+//                            } else if (sport.selectedFrequency == 2) {
+//                                Text("每週")
+//                            } else if (sport.selectedFrequency == 3) {
+//                                Text("每月")
+//                            }
+//                        }
+//                        HStack {
+//                            Image(systemName: "arrow.clockwise")
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fit)
+//                                .foregroundColor(.white)
+//                                .padding(6)
+//                                .background(Color.gray)
+//                                .clipShape(RoundedRectangle(cornerRadius: 8))
+//                                .frame(width: 30, height: 30)
+//                            Text("結束重複")
+//                            Spacer()
+//                            if (sport.recurringOption == 1){
+//                                Text("一直重複")
+//                            } else if (sport.recurringOption == 2) {
+//                                Text(formattedDate(sport.dueDateTime))
+//                            }
+//                        }
+//                    } else {
+//                        HStack {
+//                            Image(systemName: "arrow.clockwise")
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fit)
+//                                .foregroundColor(.white)
+//                                .padding(6)
+//                                .background(Color.gray)
+//                                .clipShape(RoundedRectangle(cornerRadius: 8))
+//                                .frame(width: 30, height: 30)
+//                            Spacer()
+//                            Text("不重複")
+//                        }
+//                    }
+//                }
                 TextField("備註", text: $sport.todoNote)
                     .onChange(of: sport.todoNote) { newValue in
                         sport.todoNote = newValue
@@ -276,9 +276,8 @@ struct DetailSportView_Previews: PreviewProvider {
                                  selectedSport: "溜冰",
                                  sportValue: 1.1,
                                  sportUnits: "次",
-                               isRecurring: true,
+                                 recurringUnit: "每週",
                                recurringOption:2,
-                               selectedFrequency: 1,
                                todoStatus: false,
                                dueDateTime: Date(),
                                reminderTime: Date(),

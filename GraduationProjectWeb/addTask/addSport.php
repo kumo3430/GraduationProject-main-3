@@ -18,7 +18,7 @@ $todoIntroduction = $data['todoIntroduction'];
 // } else {
 //     $todoLabel= $data['label'];
 // }
-
+$todoLabel= $data['label'];
 $todoStatus= 0;
 $startDateTime = $data['startDateTime'];
 
@@ -155,6 +155,7 @@ $userData = array(
     'sportValue' => $sportValue,
     'sportUnit' => $sportUnit,
     'todoStatus' => $todoStatus,
+    'frequency' => $frequency,
     'dueDateTime' => $dueDateTime,
     'reminderTime' => $reminderTime,
     'message' => $message . $message1 . $message2

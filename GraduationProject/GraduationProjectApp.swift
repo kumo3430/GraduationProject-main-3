@@ -363,8 +363,8 @@ struct YourApp: App {
                         for index in userData.todoTitle.indices {
                             var todoStatus: Bool = false
                             var recurringOption: Int = 0
-                            var isRecurring: Bool = false
 //                            var sportValue: Float = 0.0
+                            var recurringUnit: String = ""
                             var sportUnit: String = ""
                             if let startDate = convertToDate(userData.startDateTime[index]),
                                let dueDateTime = convertToDate(userData.dueDateTime[index]),
@@ -377,7 +377,13 @@ struct YourApp: App {
                                 } else {
                                     recurringOption = 1
                                 }
-                                
+                                if (userData.frequency[index] == "1" ){
+                                    recurringUnit = "每日"
+                                } else  if (userData.frequency[index] == "2" ) {
+                                    recurringUnit = "每週"
+                                } else  if (userData.frequency[index] == "3" ) {
+                                    recurringUnit = "每月"
+                                }
                                 if (userData.sportUnit[index] == "0" ){
                                     sportUnit = "小時"
                                 } else  if (userData.sportUnit[index] == "1" ) {
@@ -392,11 +398,6 @@ struct YourApp: App {
                                     todoStatus = true
                                 }
                                 
-                                if (userData.frequency[index] == "0" ) {
-                                    isRecurring = false
-                                } else {
-                                    isRecurring = true
-                                }
                                 let taskId = Int(userData.todo_id[index])
                                 let sport = Sport(id: taskId!,
                                                 label: userData.todoLabel[index]!,
@@ -406,9 +407,8 @@ struct YourApp: App {
                                                 selectedSport: userData.sportType[index],
                                                   sportValue:  Float(userData.sportValue[index])!,
                                                 sportUnits: sportUnit,
-                                                isRecurring: isRecurring,
+                                                recurringUnit: recurringUnit,
                                                 recurringOption: recurringOption,
-                                                selectedFrequency: Int(userData.frequency[index])!,
                                                 todoStatus: todoStatus,
                                                 dueDateTime: dueDateTime,
                                                 reminderTime: reminderTime,
@@ -502,9 +502,9 @@ struct YourApp: App {
                         for index in userData.todoTitle.indices {
                             var todoStatus: Bool = false
                             var recurringOption: Int = 0
-                            var isRecurring: Bool = false
+//                            var isRecurring: Bool = false
 //                            var sportValue: Float = 0.0
-                            var dietsUnit: String = ""
+                            var recurringUnit: String = ""
                             if let startDate = convertToDate(userData.startDateTime[index]),
                                let dueDateTime = convertToDate(userData.dueDateTime[index]),
                                let reminderTime = convertToTime(userData.reminderTime[index]) {
@@ -518,11 +518,11 @@ struct YourApp: App {
                                 }
                                 
                                 if (userData.frequency[index] == "1" ){
-                                    dietsUnit = "每日"
+                                    recurringUnit = "每日"
                                 } else  if (userData.frequency[index] == "2" ) {
-                                    dietsUnit = "每週"
+                                    recurringUnit = "每週"
                                 } else  if (userData.frequency[index] == "3" ) {
-                                    dietsUnit = "每月"
+                                    recurringUnit = "每月"
                                 }
                                 
                                 if (userData.todoStatus[index] == "0" ){
@@ -531,11 +531,11 @@ struct YourApp: App {
                                     todoStatus = true
                                 }
                                 
-                                if (userData.frequency[index] == "0" ) {
-                                    isRecurring = false
-                                } else {
-                                    isRecurring = true
-                                }
+//                                if (userData.frequency[index] == "0" ) {
+//                                    isRecurring = false
+//                                } else {
+//                                    isRecurring = true
+//                                }
                                 let taskId = Int(userData.todo_id[index])
                                 let diet = Diet(id: taskId!,
                                                 label: userData.todoLabel[index]!,
@@ -544,7 +544,7 @@ struct YourApp: App {
                                                 startDateTime: startDate,
                                                 selectedDiets: userData.dietsType[index],
                                                 dietsValue: Int(userData.dietsValue[index])!,
-                                                dietsUnit: dietsUnit,
+                                                recurringUnit: recurringUnit,
                                                 recurringOption: recurringOption,
                                                 todoStatus: todoStatus,
                                                 dueDateTime: dueDateTime,

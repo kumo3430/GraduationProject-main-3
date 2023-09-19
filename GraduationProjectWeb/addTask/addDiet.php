@@ -18,7 +18,7 @@ $todoIntroduction = $data['todoIntroduction'];
 // } else {
 //     $todoLabel= $data['label'];
 // }
-
+$todoLabel= $data['label'];
 $todoStatus= 0;
 $startDateTime = $data['startDateTime'];
 
