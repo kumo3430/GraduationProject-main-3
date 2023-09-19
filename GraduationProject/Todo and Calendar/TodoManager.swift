@@ -88,7 +88,6 @@ struct DietData: Decodable {
     
     var dietsType: [String]
     var dietsValue: [String]
-    var dietsUnit: [String]
     
     var frequency: [String]
     var reminderTime: [String]

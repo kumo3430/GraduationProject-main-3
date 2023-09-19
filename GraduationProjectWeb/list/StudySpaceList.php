@@ -7,8 +7,7 @@ $data = json_decode($input_data, true);
 // 取得用戶名和密碼
 // $userName = $data['userName'];
 // $uid = $_SESSION['uid'];
-// $uid = $data['uid'];
-$uid = 3;
+$uid = $data['uid'];
 $_SESSION['uid'] = $uid ;
 $category_id = 1;
 
@@ -29,9 +28,9 @@ $repetition3Count = array();
 $repetition4Count = array();
 
 $servername = "localhost"; // 資料庫伺服器名稱
-$user = "heonrim"; // 資料庫使用者名稱
-$pass = "22042205"; // 資料庫使用者密碼
-$dbname = "GraduationProject"; // 資料庫名稱
+$user = "kumo"; // 資料庫使用者名稱
+$pass = "coco3430"; // 資料庫使用者密碼
+$dbname = "spaced"; // 資料庫名稱
 
 // 建立與 MySQL 資料庫的連接
 $conn = new mysqli($servername, $user, $pass, $dbname);
@@ -50,7 +49,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $TodoTitle[] = $row['todoTitle'];
         $TodoIntroduction[] = $row['todoIntroduction'];
-        $TodoLabel[] = $row['todoLabel'];
+        $TodoLabel[] = $row['label'];
         $StartDateTime[] = $row['startDateTime'];
         $ReminderTime[] = $row['reminderTime'];
         $todoStatus[] = $row['todoStatus'];
@@ -76,7 +75,7 @@ $userData = array(
     'startDateTime' => $StartDateTime,
     'reminderTime' => $ReminderTime,
     'todo_id' => $todo_id,
-    'todoStatus' => $todoStatus, 
+    'todoStatus' => $todoStatus,
     'repetition1Status' => $repetition1Status,
     'repetition2Status' => $repetition2Status,
     'repetition3Status' => $repetition3Status,

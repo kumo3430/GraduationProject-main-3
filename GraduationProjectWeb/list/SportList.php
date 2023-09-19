@@ -15,6 +15,12 @@ $TodoTitle = array();
 $TodoIntroduction = array();
 $TodoLabel = array();
 $StartDateTime = array();
+
+$sportType = array();
+$sportValue = array();
+$sportUnit = array();
+
+$frequency = array();
 $ReminderTime = array();
 $todo_id = array();
 $todoStatus = array();
@@ -23,9 +29,9 @@ $todoNote = array();
 
 
 $servername = "localhost"; // 資料庫伺服器名稱
-$user = "heonrim"; // 資料庫使用者名稱
-$pass = "22042205"; // 資料庫使用者密碼
-$dbname = "GraduationProject"; // 資料庫名稱
+$user = "kumo"; // 資料庫使用者名稱
+$pass = "coco3430"; // 資料庫使用者密碼
+$dbname = "spaced"; // 資料庫名稱
 
 // 建立與 MySQL 資料庫的連接
 $conn = new mysqli($servername, $user, $pass, $dbname);
@@ -34,7 +40,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$TodoSELSql = "SELECT * FROM Todo T RIGHT JOIN StudyGeneral SG ON T.id = SG.todo_id WHERE T.uid = '$uid' && T.category_id = '0';";
+$TodoSELSql = "SELECT * FROM Todo T RIGHT JOIN Sport S ON T.id = S.todo_id WHERE T.uid = '$uid' && T.category_id = '2';";
 
 $result = $conn->query($TodoSELSql);
 if ($result->num_rows > 0) {
@@ -43,6 +49,12 @@ if ($result->num_rows > 0) {
         $TodoIntroduction[] = $row['todoIntroduction'];
         $TodoLabel[] = $row['label'];
         $StartDateTime[] = $row['startDateTime'];
+
+        $sportType[] = $row['sportType'];
+        $sportValue[] = $row['sportValue'];
+        $sportUnit[] = $row['sportUnit'];
+
+        $frequency[] = $row['frequency'];
         $ReminderTime[] = $row['reminderTime'];
         $todo_id[] = $row['todo_id'];
         $todoStatus[] = $row['todoStatus'];
@@ -59,6 +71,12 @@ $userData = array(
     'todoIntroduction' => $TodoIntroduction,
     'todoLabel' => $TodoLabel,
     'startDateTime' => $StartDateTime,
+
+    'sportType' => $sportType,
+    'sportValue' => $sportValue,
+    'sportUnit' => $sportUnit,
+
+    'frequency' => $frequency,
     'reminderTime' => $ReminderTime,
     'todo_id' => $todo_id,
     'todoStatus' => $todoStatus,
