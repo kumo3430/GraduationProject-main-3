@@ -48,13 +48,15 @@ struct TabBarView: View {
     
     @State private var selectedTab = 0
     @State private var activeView: ActiveView = .calendar
+    @State private var offset: CGFloat = 0
+    @State private var tabBarHidden = false
     
     var body: some View {
         
         ZStack(alignment: .bottom){
             TabView(selection: $selectedTab) {
-                HomeView()
-                    .tag(0)
+                HomeView(tabBarHidden: $tabBarHidden)
+                                    .tag(0)
 
                 ZStack {
                     if activeView == .calendar {
@@ -69,7 +71,7 @@ struct TabBarView: View {
                 }
                 .tag(1)
 
-                CommunityProfileView()
+                TestView()
                     .tag(2)
 
                 TestView()
@@ -92,6 +94,7 @@ struct TabBarView: View {
             .background(Color(red: 78/255, green: 131/255, blue: 162/255).opacity(0.75))
             .cornerRadius(35)
             .padding(.horizontal, 26)
+            .offset(y: tabBarHidden ? 70 : 0)
         }
     }
 }
@@ -121,4 +124,4 @@ struct TabBarView_Previews: PreviewProvider {
             .environmentObject(SportStore())
             .environmentObject(TickerStore())
     }
-}
+}   

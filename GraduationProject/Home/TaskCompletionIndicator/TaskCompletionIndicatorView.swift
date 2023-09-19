@@ -13,31 +13,34 @@ struct TaskCompletionIndicatorView: View {
     @ObservedObject var viewModel: TaskCompletionViewModel = TaskCompletionViewModel()
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text("任務完成指標")
-                .font(.system(size: 32, weight: .bold))
-                .padding(.top, 20)
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("任務完成指標")
+                    .font(.system(size: 32, weight: .bold))
+                    .padding(.top, 20)
 
-            Picker("選擇查看方式", selection: $viewModel.viewingMode) {
-                ForEach(ViewingMode.allCases, id: \.self) { mode in
-                    Text(mode.rawValue).tag(mode)
+                Picker("選擇查看方式", selection: $viewModel.viewingMode) {
+                    ForEach(ViewingMode.allCases, id: \.self) { mode in
+                        Text(mode.rawValue).tag(mode)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal, 20)
+
+                if viewModel.viewingMode == .byTime {
+                    TaskCompletionTimeBasedView(selectedTimeFrame: $selectedTimeFrame, selectedDate: $selectedDate, viewModel: viewModel)
+                } else {
+                    TaskCompletionEventBasedView(selectedDate: $selectedDate, viewModel: viewModel)
                 }
             }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding(.horizontal, 20)
-
-            if viewModel.viewingMode == .byTime {
-                TaskCompletionTimeBasedView(selectedTimeFrame: $selectedTimeFrame, selectedDate: $selectedDate, viewModel: viewModel)
-            } else {
-                TaskCompletionEventBasedView(selectedDate: $selectedDate, viewModel: viewModel)
-            }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(25)
+            .shadow(color: Color.black.opacity(0.1), radius: 15, x: 0, y: 10)
+            .padding(.horizontal, 15)  // Add horizontal padding for better look on edges
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(25)
-        .shadow(color: Color.black.opacity(0.1), radius: 15, x: 0, y: 10)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.blue.opacity(0.05))
+        .edgesIgnoringSafeArea(.all)  // Ensure the background color fills the entire view
     }
 }
 

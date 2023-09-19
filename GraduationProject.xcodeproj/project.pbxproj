@@ -23,7 +23,6 @@
 		3B37A8E32A188BA6009BB504 /* GraduationProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B37A8E22A188BA6009BB504 /* GraduationProjectTests.swift */; };
 		3B37A8ED2A188BA6009BB504 /* GraduationProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B37A8EC2A188BA6009BB504 /* GraduationProjectUITests.swift */; };
 		3B37A8EF2A188BA6009BB504 /* GraduationProjectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B37A8EE2A188BA6009BB504 /* GraduationProjectUITestsLaunchTests.swift */; };
-		3B421BE32AAFF730000255BA /* AddSleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B421BE22AAFF730000255BA /* AddSleepView.swift */; };
 		3B4A8FD42AA6D8A100C4E0AF /* AchievementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4A8FD32AA6D8A100C4E0AF /* AchievementView.swift */; };
 		3B4A8FD62AA6DC3D00C4E0AF /* AchievementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4A8FD52AA6DC3D00C4E0AF /* AchievementCardView.swift */; };
 		3B4A8FD82AA6E78B00C4E0AF /* SportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4A8FD72AA6E78B00C4E0AF /* SportDetailView.swift */; };
@@ -560,7 +559,6 @@
 			files = (
 				3B4A8FD62AA6DC3D00C4E0AF /* AchievementCardView.swift in Sources */,
 				3BFDFD6A2A1C6E3D0071798F /* AppDelegate.swift in Sources */,
-				3B421BE32AAFF730000255BA /* AddSleepView.swift in Sources */,
 				3B4A8FD42AA6D8A100C4E0AF /* AchievementView.swift in Sources */,
 				3BA700552A1CCB940096B2FF /* FireAuth.swift in Sources */,
 				3B8CBB212AB2D9C5004E5A26 /* TaskCompletionEventBasedView.swift in Sources */,

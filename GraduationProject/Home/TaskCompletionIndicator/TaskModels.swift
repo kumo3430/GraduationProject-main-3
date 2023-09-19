@@ -20,10 +20,11 @@ enum EventType: String, CaseIterable {
     case diet = "飲食"
 }
 
-struct TaskInfo {
+struct TaskInfo: Identifiable {
+    var id = UUID()  // Add this line
     var title: String
     var date: Date
     var completedTasks: Int
     var totalTasks: Int
-    var eventName: EventType // Changed from String to EventType
+    var eventName: EventType
 }

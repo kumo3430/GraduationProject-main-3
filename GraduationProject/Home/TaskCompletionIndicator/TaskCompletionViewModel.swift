@@ -106,4 +106,21 @@ class TaskCompletionViewModel: ObservableObject {
                 return ["飲食": 0.75]
             }
         }
+    func tasks(for timeFrame: TimeFrame, date: Date) -> [TaskInfo] {
+        switch timeFrame {
+        case .week:
+            let startOfWeek = Calendar.current.startOfWeek(for: date)
+            let endOfWeek = Calendar.current.date(byAdding: .day, value: 6, to: startOfWeek)!
+            return tasks.filter { $0.date >= startOfWeek && $0.date <= endOfWeek }
+        case .month:
+            let startOfMonth = Calendar.current.startOfMonth(for: date)
+            let endOfMonth = Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.date(byAdding: .month, value: 1, to: startOfMonth)!)!
+            return tasks.filter { $0.date >= startOfMonth && $0.date <= endOfMonth }
+        case .year:
+            let startOfYear = Calendar.current.startOfYear(for: date)
+            let endOfYear = Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.date(byAdding: .year, value: 1, to: startOfYear)!)!
+            return tasks.filter { $0.date >= startOfYear && $0.date <= endOfYear }
+        }
+    }
+
 }

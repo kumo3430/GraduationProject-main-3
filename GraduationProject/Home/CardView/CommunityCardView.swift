@@ -11,7 +11,7 @@ struct CommunityCardView: View {
     var body: some View {
         TabView {
             ForEach(1...5, id: \.self) { index in
-                VStack {
+                VStack(alignment: .leading, spacing: 10){
                     Text("我是來自群組相關最新消息的")
                         .padding(.top, 20)
                     Text("Card \(index)")
@@ -25,7 +25,7 @@ struct CommunityCardView: View {
             }
         }
         .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(minWidth: 200, maxWidth: .infinity, minHeight: 300, maxHeight: .infinity)
         .cardStyle()
     }
 }

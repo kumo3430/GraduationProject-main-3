@@ -20,13 +20,20 @@ struct AddStudyView: View {
     @State var todoStatus: Bool = false
     @State var reminderTime: Date = Date()
     @State var todoNote: String = ""
+    @State private var studyValue: Float = 0.0
+    @State private var selectedStudyUnit: String = "次"
     @State private var isRecurring = false
     @State private var selectedFrequency = 1
     @State private var recurringOption = 1  // 1: 持續重複, 2: 選擇結束日期
     @State private var recurringEndDate = Date()
+    @State private var selectedTimeUnit: String = "每日"
     
     @State var messenge = ""
     @State var isError = false
+    @State private var studyUnit: String = "次"
+    let studyUnits = ["次", "小時"]
+    let timeUnits = ["每日", "每週", "每月"]
+
     
     struct TodoData : Decodable {
         var userId: String?
@@ -89,35 +96,59 @@ struct AddStudyView: View {
                 }
                 
                 Section {
-                    Toggle(isOn: $isRecurring) {
-                        HStack {
-                            Image(systemName: "arrow.clockwise")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.white)
-                                .padding(6)
-                                .background(Color.gray)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .frame(width: 30, height: 30)
-                            Text("重複")
+                                    HStack {
+                                        Menu {
+                                            ForEach(timeUnits, id: \.self) { unit in
+                                                Button(action: {
+                                                    selectedTimeUnit = unit
+                                                }) {
+                                                    Text(unit)
+                                                }
+                                            }
+                                        } label: {
+                                            Text(selectedTimeUnit)
+                                                .padding(.trailing)
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        TextField("輸入數值", value: $studyValue, formatter: NumberFormatter())
+                                            .keyboardType(.decimalPad)
+                                            .frame(width: 80, alignment: .center)
+                                        
+                                        Picker("選擇單位", selection: $studyUnit) {
+                                            ForEach(studyUnits, id: \.self) { unit in
+                                                Text(unit)
+                                                    .font(.system(size: 12))
+                                            }
+                                        }
+                                        .pickerStyle(SegmentedPickerStyle())
+                                        .frame(width: 150, alignment: .trailing)
+
+                                        .pickerStyle(SegmentedPickerStyle())
+                                        .frame(width: 120, alignment: .trailing)
+                                    }
+                                }
+                
+                Section {
+                    HStack {
+                        Image(systemName: "arrow.clockwise")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(Color.gray)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .frame(width: 30, height: 30)
+                        
+                        Picker("週期", selection: $recurringOption) {
+                            Text("一直重複").tag(1)
+                            Text("週期結束時間").tag(2)
                         }
                     }
                     
-                    if isRecurring {
-                        Picker("重複頻率", selection: $selectedFrequency) {
-                            Text("每日").tag(1)
-                            Text("每週").tag(2)
-                            Text("每月").tag(3)
-                        }
-                        
-                        Picker("結束重複", selection: $recurringOption) {
-                            Text("一直重複").tag(1)
-                            Text("選擇結束日期").tag(2)
-                        }
-                        
-                        if recurringOption == 2 {
-                            DatePicker("結束重複日期", selection: $recurringEndDate, displayedComponents: [.date])
-                        }
+                    if recurringOption == 2 {
+                        DatePicker("結束重複日期", selection: $recurringEndDate, displayedComponents: [.date])
                     }
                 }
                 TextField("備註", text: $todoNote)

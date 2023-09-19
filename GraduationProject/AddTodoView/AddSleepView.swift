@@ -1,13 +1,13 @@
 //
-//  AddDietsView.swift
+//  AddSleepView.swift
 //  GraduationProject
 //
-//  Created by heonrim on 8/8/23.
+//  Created by heonrim on 8/16/23.
 //
 
 import SwiftUI
 
-struct AddDietView: View {
+struct AddSleepView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var todoStore: TodoStore
     
@@ -23,25 +23,25 @@ struct AddDietView: View {
     @State var reminderTime: Date = Date()
     @State var todoNote: String = ""
     @State var dietsType: String = ""
-    @State private var showDietsPicker = false
-    @State private var selectedDietsUnit: String = "次"
+    @State private var showSleepsPicker = false
+    @State private var selectedSleepsUnit: String = "次"
     @State private var selectedTimeUnit: String = "每日"
-    let diets = [
-        "減糖", "多喝水", "少油炸", "多吃蔬果"
+    @State private var sleepDuration: Date = Date()  // Time for sleep duration
+    
+    let sleeps = [
+        "早睡", "早起", "睡眠時長"
     ]
     
-    let dietsUnitsByType: [String: [String]] = [
-        "減糖": ["次"],
-        "多喝水": ["豪升"],
-        "少油炸": ["次"],
-        "多吃蔬果": ["份"]
+    let sleepsUnitsByType: [String: [String]] = [
+        "早睡": ["睡覺"],
+        "早起": ["起床"],
+        "睡眠時長": ["小時"],
     ]
     
-    let dietsPreTextByType: [String: String] = [
-        "減糖": "少於",
-        "多喝水": "至少",
-        "少油炸": "少於",
-        "多吃蔬果": "至少"
+    let sleepsPreTextByType: [String: String] = [
+        "早睡": "早於",
+        "早起": "早於",
+        "睡眠時長": "睡滿",
     ]
     
     
@@ -51,9 +51,9 @@ struct AddDietView: View {
     @State private var selectedFrequency = 1
     @State private var recurringOption = 1
     @State private var recurringEndDate = Date()
-    @State private var selectedDiets = "減糖"
-    @State private var dietsUnit = "每日"
-    @State private var dietsValue: Double = 0
+    @State private var selectedSleeps = "早睡"
+    @State private var sleepsUnit = "每日"
+    @State private var sleepsValue: Double = 0
     
     
     struct TodoData: Decodable {
@@ -114,7 +114,7 @@ struct AddDietView: View {
                 
                 Section {
                     HStack {
-                        Image(systemName: "fork.knife.circle.fill")
+                        Image(systemName: "bed.double.circle.fill")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .foregroundColor(.white)
@@ -124,67 +124,58 @@ struct AddDietView: View {
                             .frame(width: 30, height: 30)
                             .padding(.trailing, 8)
                         
-                        Text("飲食類型")
+                        Text("作息類型")
                         
                         Spacer()
                         
                         Button(action: {
-                            self.showDietsPicker.toggle()
+                            self.showSleepsPicker.toggle()
                         }) {
                             HStack {
-                                Text(selectedDiets)
+                                Text(selectedSleeps)
                                     .foregroundColor(.black)
                             }
                         }
                         .buttonStyle(.bordered)
                     }
                     
-                    if showDietsPicker {
-                        Picker("飲食類型", selection: $selectedDiets) {
-                            ForEach(diets, id: \.self) { diet in
-                                Text(diet).tag(diet)
+                    if showSleepsPicker {
+                        Picker("作息類型", selection: $selectedSleeps) {
+                            ForEach(sleeps, id: \.self) { sleep in
+                                Text(sleep).tag(sleep)
                             }
                         }
                         .pickerStyle(WheelPickerStyle())
                     }
                     
                     HStack(spacing: 10) {
-                        Menu {
-                            ForEach(timeUnits, id: \.self) { unit in
-                                Button(action: {
-                                    selectedTimeUnit = unit
-                                }) {
-                                    Text(unit)
-                                }
-                            }
-                        } label: {
-                            Text(selectedTimeUnit)
-                                .padding(.trailing)
-                        }
+                        Text("每日").padding(.trailing)
                         
-                        if let preText = dietsPreTextByType[selectedDiets] {
+                        if let preText = sleepsPreTextByType[selectedSleeps] {
                             Text(preText)
                                 .font(.subheadline)
                         }
                         
                         Spacer()
                         
-                        TextField("數值", value: $dietsValue, formatter: NumberFormatter())
-                            .keyboardType(.decimalPad)
-                            .frame(width: 60, alignment: .leading)
+                        if selectedSleeps == "早睡" || selectedSleeps == "早起" {
+                            DatePicker("選擇時間", selection: $sleepDuration, displayedComponents: [.hourAndMinute])
+                                .labelsHidden()
+                        } else if selectedSleeps == "睡眠時長" {
+                            TextField("輸入數值", value: $sleepsValue, formatter: NumberFormatter())
+                                .keyboardType(.decimalPad)
+                                .frame(width: 80, alignment: .center)
+                        }
                         
-                        if let primaryUnits = dietsUnitsByType[selectedDiets] {
+                        if let primaryUnits = sleepsUnitsByType[selectedSleeps] {
                             Text(primaryUnits.first!)
                                 .font(.subheadline)
                         }
+                        
                     }
                     .padding(.horizontal)
                 }
-                
-                
-                
-                
-                
+
                 Section {
                     HStack {
                         Image(systemName: "arrow.clockwise")
@@ -208,7 +199,7 @@ struct AddDietView: View {
                 }
                 TextField("備註", text: $todoNote)
             }
-            .navigationBarTitle("飲食")
+            .navigationBarTitle("作息")
             .navigationBarItems(leading:
                                     Button(action: {
                 presentationMode.wrappedValue.dismiss()
@@ -219,7 +210,7 @@ struct AddDietView: View {
                                 trailing: Button("完成", action: addTodo))
         }
         .onAppear {
-            dietsUnit = dietsUnitsByType["減糖"]!.first!
+            sleepsUnit = sleepsUnitsByType["早睡"]!.first!
         }
     }
     
@@ -298,8 +289,8 @@ struct AddDietView: View {
         .resume()
     }
 }
-struct AddDietView_Previews: PreviewProvider {
+struct AddSleepView_Previews: PreviewProvider {
     static var previews: some View {
-        AddDietView()
+        AddSleepView()
     }
 }

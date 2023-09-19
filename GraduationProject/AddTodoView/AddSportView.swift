@@ -28,6 +28,8 @@ struct AddSportView: View {
     @State private var SportUnit: Int = 0
     @State private var showSportPicker = false
     @State private var selectedSport = "跑步" // 預設值
+    @State private var selectedTimeUnit: String = "每日"
+
 
     let sports = [
       "跑步", "單車騎行", "散步", "游泳", "爬樓梯", "健身",
@@ -44,7 +46,7 @@ struct AddSportView: View {
     
     @State var messenge = ""
     @State var isError = false
-
+    let timeUnits = ["每日", "每周", "每月"]
     let sportUnits = ["小時", "次", "卡路里"]
 
     struct TodoData : Decodable {
@@ -78,12 +80,12 @@ struct AddSportView: View {
                         HStack {
                             Image(systemName: "tag.fill")
                                 .resizable()
-                                .aspectRatio(contentMode: .fit) // 保持圖示的原始寬高比
-                                .foregroundColor(.white) // 圖示顏色設為白色
-                                .padding(6) // 確保有足夠的空間顯示外框和背景色
-                                .background(Color.yellow) // 設定背景顏色
-                                .clipShape(RoundedRectangle(cornerRadius: 8)) // 設定方形的邊框，並稍微圓角
-                                .frame(width: 30, height: 30) // 這裡的尺寸是示例，您可以根據需要調整
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.white)
+                                .padding(6)
+                                .background(Color.yellow)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .frame(width: 30, height: 30)
                             TextField("標籤", text: $label)
                         }
                     }
@@ -111,6 +113,7 @@ struct AddSportView: View {
                         DatePicker("提醒時間", selection: $reminderTime, displayedComponents: [.hourAndMinute])
                     }
                 }
+                
                 Section {
                     HStack {
                         Image(systemName: "figure.walk.circle.fill")
@@ -132,7 +135,6 @@ struct AddSportView: View {
                             HStack {
                                 Text(selectedSport)
                                     .foregroundColor(.black)
-
                             }
                         }
                         .buttonStyle(.bordered)
@@ -147,54 +149,60 @@ struct AddSportView: View {
                         .pickerStyle(WheelPickerStyle())
                     }
 
-
                     HStack {
+                        Menu {
+                            ForEach(timeUnits, id: \.self) { unit in
+                                Button(action: {
+                                    selectedTimeUnit = unit
+                                }) {
+                                    Text(unit)
+                                }
+                            }
+                        } label: {
+                            Text(selectedTimeUnit)
+                                .padding(.trailing)
+                        }
+                        
+                        Spacer()
+                        
                         TextField("輸入數值", value: $sportValue, formatter: NumberFormatter())
                             .keyboardType(.decimalPad)
-                            .frame(width: 100, alignment: .leading)
-
-                        Spacer()
-
+                            .frame(width: 80, alignment: .center)
+                        
                         Picker("選擇單位", selection: $sportUnit) {
-                            ForEach(sportUnits, id: \.self) {
-                                Text($0)
+                            ForEach(sportUnits, id: \.self) { unit in
+                                Text(unit)
+                                    .font(.system(size: 12))
                             }
                         }
                         .pickerStyle(SegmentedPickerStyle())
                         .frame(width: 150, alignment: .trailing)
+
+                        .pickerStyle(SegmentedPickerStyle())
+                        .frame(width: 120, alignment: .trailing)
                     }
                 }
 
+
                 Section {
-                    Toggle(isOn: $isRecurring) {
-                        HStack {
-                            Image(systemName: "arrow.clockwise")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.white)
-                                .padding(6)
-                                .background(Color.gray)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .frame(width: 30, height: 30)
-                            Text("重複")
+                    HStack {
+                        Image(systemName: "arrow.clockwise")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(Color.gray)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .frame(width: 30, height: 30)
+                        
+                        Picker("週期", selection: $recurringOption) {
+                            Text("一直重複").tag(1)
+                            Text("週期結束時間").tag(2)
                         }
                     }
-
-                    if isRecurring {
-                        Picker("重複頻率", selection: $selectedFrequency) {
-                            Text("每日").tag(1)
-                            Text("每週").tag(2)
-                            Text("每月").tag(3)
-                        }
-
-                        Picker("結束重複", selection: $recurringOption) {
-                            Text("一直重複").tag(1)
-                            Text("選擇結束日期").tag(2)
-                        }
-
-                        if recurringOption == 2 {
-                            DatePicker("結束重複日期", selection: $recurringEndDate, displayedComponents: [.date])
-                        }
+                    
+                    if recurringOption == 2 {
+                        DatePicker("結束重複日期", selection: $recurringEndDate, displayedComponents: [.date])
                     }
                 }
                 TextField("備註", text: $todoNote)
