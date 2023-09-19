@@ -52,7 +52,7 @@ struct CalendarView: View {
                     ScrollView {
                         eventList()
                     }
-                    .padding(.top, 15)
+//                    .padding(.top, 15)
                 }
                 .padding()
             }
@@ -146,16 +146,17 @@ struct CalendarView: View {
         let filteredDiets = dietStore.dietForDate(selectedDate)
         
         return VStack(spacing: 20) {
-            Group {
-                Text("飲食")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .padding(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                ForEach(mockData.dietEvents) { events in
-                    ModernEventRow(eventTitle: events.title, eventSubtitle: "開始時間: \(formattedDate(events.date))", icon: "fork.knife")
-                }
-            }
+            //要修改畫面的時候再打開
+//            Group {
+//                Text("飲食")
+//                    .font(.title2)
+//                    .fontWeight(.bold)
+//                    .padding(.leading)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                ForEach(mockData.dietEvents) { events in
+//                    ModernEventRow(eventTitle: events.title, eventSubtitle: "開始時間: \(formattedDate(events.date))", icon: "fork.knife")
+//                }
+//            }
             
             Group {
                 Text("間隔學習法")
@@ -218,12 +219,16 @@ struct CalendarView: View {
                     .foregroundColor(Color.blue.opacity(0.7))
                     .background(Color.gray.opacity(0.1))
                     .clipShape(Circle())
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading) {
                     Text(eventTitle)
                         .font(.headline)
+                        .multilineTextAlignment(.leading)
+                        .frame(minWidth: 250)
                     Text(eventSubtitle)
                         .font(.subheadline)
                         .foregroundColor(.gray)
+                        .multilineTextAlignment(.leading)
+                        .frame(minWidth: 250)
                 }
             }
             .padding()
