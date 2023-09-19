@@ -263,6 +263,7 @@ struct Login : View {
                         print("使用者帳號為：\(userData.email)")
                         UserDefaults.standard.set(true, forKey: "signIn")
                         UserDefaults.standard.set("\(userData.id)", forKey: "uid")
+                        UserDefaults.standard.set("\(userData.email)", forKey: "userName")
                         print("============== loginView ==============")
                         UserDefaults.standard.set(true, forKey: "signIn")
                     }
