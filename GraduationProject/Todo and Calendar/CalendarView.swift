@@ -14,10 +14,25 @@ struct Event: Identifiable {
     let date: Date
 }
 
+class MockData: ObservableObject {
+    @Published var dietEvents: [Event]
+    
+    init() {
+        // 在此初始化你的模拟数据
+        self.dietEvents = [
+            Event(title: "Event 1", date: Date()),
+            Event(title: "Event 2", date: Date()),
+            Event(title: "Event 3", date: Date())
+        ]
+    }
+}
+
 struct CalendarView: View {
     @EnvironmentObject var taskStore: TaskStore
     @EnvironmentObject var todoStore: TodoStore
     @EnvironmentObject var sportStore: SportStore
+    @EnvironmentObject var dietStore: DietStore
+    @EnvironmentObject var mockData: MockData
     @State private var showingActionSheet = false
     @State private var action: Action? = nil
     @State var selectedDate = Date()
@@ -128,8 +143,20 @@ struct CalendarView: View {
         let filteredTasks = taskStore.tasksForDate(selectedDate)
         let filteredTodos = todoStore.todosForDate(selectedDate)
         let filteredSports = sportStore.sportsForDate(selectedDate)
+        let filteredDiets = dietStore.dietForDate(selectedDate)
         
         return VStack(spacing: 20) {
+            Group {
+                Text("飲食")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .padding(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                ForEach(mockData.dietEvents) { events in
+                    ModernEventRow(eventTitle: events.title, eventSubtitle: "開始時間: \(formattedDate(events.date))", icon: "fork.knife")
+                }
+            }
+            
             Group {
                 Text("間隔學習法")
                     .font(.title2)
@@ -162,6 +189,17 @@ struct CalendarView: View {
                     ModernEventRow(eventTitle: sport.title, eventSubtitle: "開始時間: \(formattedDate(sport.startDateTime))", icon: "figure.walk")
                 }
             }
+            
+            Group {
+                Text("飲食")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .padding(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                ForEach(filteredDiets) { diet in
+                    ModernEventRow(eventTitle: diet.title, eventSubtitle: "開始時間: \(formattedDate(diet.startDateTime))", icon: "fork.knife")
+                }
+            }
         }
         .padding(.horizontal, 15)
     }
@@ -192,6 +230,7 @@ struct CalendarView: View {
             .background(Color.white)
             .cornerRadius(15)
             .shadow(color: Color.gray.opacity(0.2), radius: 5, x: 0, y: 5)
+//            .frame(width: UIScreen.main.bounds.width, alignment: .center)
         }
     }
     
@@ -226,9 +265,16 @@ struct CalendarView: View {
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView(switchViewAction: {})
+        let MockData = MockData()
+        
+        return CalendarView(switchViewAction: {})
             .environmentObject(TaskStore())
             .environmentObject(TodoStore())
             .environmentObject(SportStore())
+            .environmentObject(DietStore())
+            .environmentObject(MockData)
+            .previewLayout(.sizeThatFits)
     }
 }
+
+

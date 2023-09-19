@@ -112,12 +112,12 @@ class TodoStore: ObservableObject {
     
     func todosForDate(_ date: Date) -> [Todo] {
         let filteredTodos = todos.filter { todo in
-            return isDate(date, inRangeOf: todo.startDateTime, and: todo.dueDateTime)
+            return isDate(date, inRangeOf: todo.startDateTime, and: todo.dueDateTime, description: todo.description)
         }
         return filteredTodos
     }
     
-    func isDate(_ date: Date, inRangeOf startDate: Date, and endDate: Date) -> Bool {
+    func isDate(_ date: Date, inRangeOf startDate: Date, and endDate: Date, description: String) -> Bool {
         return date >= startDate && date <= endDate
             || Calendar.current.isDate(date, inSameDayAs: startDate)
             || Calendar.current.isDate(date, inSameDayAs: endDate)

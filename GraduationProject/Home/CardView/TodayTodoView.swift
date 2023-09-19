@@ -17,7 +17,8 @@ extension Task {
 struct TodayTodoView: View {
     @EnvironmentObject var taskStore: TaskStore
     @EnvironmentObject var todoStore: TodoStore
-    
+    @EnvironmentObject var sportStore: SportStore
+    @EnvironmentObject var dietStore: DietStore
     // Helper function to format date
     func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
@@ -48,7 +49,7 @@ struct TodayTodoView: View {
                         Spacer()
                         Group {
                             if formattedDate(Date()) == formattedDate(task.nextReviewDate) {
-                                Text("設定日期")
+                                Text("開始日期")
                             } else if formattedDate(Date()) == formattedDate(task.repetition1Count) {
                                 Text("第一天")
                             } else if formattedDate(Date()) == formattedDate(task.repetition2Count) {
@@ -78,14 +79,59 @@ struct TodayTodoView: View {
                             .fontWeight(.medium)
                         Spacer()
                         if formattedDate(Date()) == formattedDate(todo.startDateTime) {
-                            Text("設定日期")
+                            Text("開始日期")
                                 .font(.caption)
                         } else {
-                            Text(formattedDate(todo.startDateTime))
+                            Text(todo.description)
                                 .font(.caption)
                         }
                     }
                 }
+                
+                HStack {
+                    Text("運動")
+                        .font(.caption)
+                    Spacer()
+                }
+                
+                ForEach(sportStore.sportsForDate(Date()), id: \.id) { todo in
+                    HStack(alignment: .top) {
+                        Text(todo.title)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        Spacer()
+                        if formattedDate(Date()) == formattedDate(todo.startDateTime) {
+                            Text("開始日期")
+                                .font(.caption)
+                        } else {
+                            Text(todo.description)
+                                .font(.caption)
+                        }
+                    }
+                }
+                
+                HStack {
+                    Text("飲食")
+                        .font(.caption)
+                    Spacer()
+                }
+                
+                ForEach(dietStore.dietForDate(Date()), id: \.id) { todo in
+                    HStack(alignment: .top) {
+                        Text(todo.title)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        Spacer()
+                        if formattedDate(Date()) == formattedDate(todo.startDateTime) {
+                            Text("開始日期")
+                                .font(.caption)
+                        } else {
+                            Text(todo.description)
+                                .font(.caption)
+                        }
+                    }
+                }
+
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -99,5 +145,7 @@ struct TodayTodoView_Previews: PreviewProvider {
         TodayTodoView()
             .environmentObject(TaskStore())
             .environmentObject(TodoStore())
+            .environmentObject(SportStore())
+            .environmentObject(DietStore())
     }
 }
