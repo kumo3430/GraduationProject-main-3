@@ -15,6 +15,10 @@ $TodoTitle = array();
 $TodoIntroduction = array();
 $TodoLabel = array();
 $StartDateTime = array();
+
+$studyValue = array();
+$studyUnit = array();
+
 $frequency = array();
 $ReminderTime = array();
 $todo_id = array();
@@ -44,6 +48,10 @@ if ($result->num_rows > 0) {
         $TodoIntroduction[] = $row['todoIntroduction'];
         $TodoLabel[] = $row['label'];
         $StartDateTime[] = $row['startDateTime'];
+
+        $studyValue[] = $row['studyValue'];
+        $studyUnit[] = $row['studyUnit'];
+
         $frequency[] = $row['frequency'];
         $ReminderTime[] = $row['reminderTime'];
         $todo_id[] = $row['todo_id'];
@@ -61,6 +69,10 @@ $userData = array(
     'todoIntroduction' => $TodoIntroduction,
     'todoLabel' => $TodoLabel,
     'startDateTime' => $StartDateTime,
+
+    'studyValue' => $studyValue,
+    'studyUnit' => $studyUnit,
+
     'frequency' => $frequency,
     'reminderTime' => $ReminderTime,
     'todo_id' => $todo_id,

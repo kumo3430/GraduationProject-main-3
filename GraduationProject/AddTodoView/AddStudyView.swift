@@ -33,7 +33,7 @@ struct AddStudyView: View {
     @State private var studyUnit: String = "次"
     let studyUnits = ["次", "小時"]
     let timeUnits = ["每日", "每週", "每月"]
-
+    
     
     struct TodoData : Decodable {
         var userId: String?
@@ -42,6 +42,10 @@ struct AddStudyView: View {
         var todoTitle: String
         var todoIntroduction: String
         var startDateTime: String
+        
+        var studyValue: Float
+        var studyUnit: Int
+        
         var todoStatus: Int
         var reminderTime: String
         var dueDateTime: String
@@ -96,39 +100,39 @@ struct AddStudyView: View {
                 }
                 
                 Section {
-                                    HStack {
-                                        Menu {
-                                            ForEach(timeUnits, id: \.self) { unit in
-                                                Button(action: {
-                                                    selectedTimeUnit = unit
-                                                }) {
-                                                    Text(unit)
-                                                }
-                                            }
-                                        } label: {
-                                            Text(selectedTimeUnit)
-                                                .padding(.trailing)
-                                        }
-                                        
-                                        Spacer()
-                                        
-                                        TextField("輸入數值", value: $studyValue, formatter: NumberFormatter())
-                                            .keyboardType(.decimalPad)
-                                            .frame(width: 80, alignment: .center)
-                                        
-                                        Picker("選擇單位", selection: $studyUnit) {
-                                            ForEach(studyUnits, id: \.self) { unit in
-                                                Text(unit)
-                                                    .font(.system(size: 12))
-                                            }
-                                        }
-                                        .pickerStyle(SegmentedPickerStyle())
-                                        .frame(width: 150, alignment: .trailing)
-
-                                        .pickerStyle(SegmentedPickerStyle())
-                                        .frame(width: 120, alignment: .trailing)
-                                    }
+                    HStack {
+                        Menu {
+                            ForEach(timeUnits, id: \.self) { unit in
+                                Button(action: {
+                                    selectedTimeUnit = unit
+                                }) {
+                                    Text(unit)
                                 }
+                            }
+                        } label: {
+                            Text(selectedTimeUnit)
+                                .padding(.trailing)
+                        }
+                        
+                        Spacer()
+                        
+                        TextField("輸入數值", value: $studyValue, formatter: NumberFormatter())
+                            .keyboardType(.decimalPad)
+                            .frame(width: 80, alignment: .center)
+                        
+                        Picker("選擇單位", selection: $studyUnit) {
+                            ForEach(studyUnits, id: \.self) { unit in
+                                Text(unit)
+                                    .font(.system(size: 12))
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .frame(width: 150, alignment: .trailing)
+                        
+                        .pickerStyle(SegmentedPickerStyle())
+                        .frame(width: 120, alignment: .trailing)
+                    }
+                }
                 
                 Section {
                     HStack {
@@ -199,13 +203,24 @@ struct AddStudyView: View {
             "todoTitle": todoTitle,
             "todoIntroduction": todoIntroduction,
             "startDateTime": formattedDate(startDateTime),
-//            "dueDateTime": formattedDate(recurringEndDate),
+            "studyValue": studyValue,
             "reminderTime": formattedTime(reminderTime),
             "todoNote": todoNote
         ]
+        if studyUnit == "小時" {
+            body["studyUnit"] = 0
+        } else if studyUnit == "次" {
+            body["studyUnit"] = 1
+        }
+        if selectedTimeUnit == "每日" {
+            body["frequency"] = 1
+        } else if selectedTimeUnit == "每週" {
+            body["frequency"] = 2
+        } else if selectedTimeUnit == "每月" {
+            body["frequency"] = 3
+        }
+
         
-        if isRecurring {
-            body["frequency"] = selectedFrequency
             if recurringOption == 1 {
                 // 持續重複
                 body["dueDateTime"] = formattedDate(Calendar.current.date(byAdding: .year, value: 5, to: recurringEndDate)!)
@@ -213,11 +228,7 @@ struct AddStudyView: View {
                 // 選擇結束日期
                 body["dueDateTime"] = formattedDate(recurringEndDate)
             }
-        } else {
-            // 不重複
-            body["frequency"] = 0
-            body["dueDateTime"] = formattedDate(recurringEndDate)
-        }
+      
         
         print("AddTodoView - body:\(body)")
         let jsonData = try! JSONSerialization.data(withJSONObject: body, options: [])
@@ -245,6 +256,8 @@ struct AddStudyView: View {
                         print("事件種類為：\(todoData.label ?? "N/A")")
                         print("事件狀態為：\(todoData.todoStatus)")
                         print("開始時間為：\(todoData.startDateTime)")
+                        print("運動目標量為：\(todoData.studyValue)")
+                        print("運動目標單位為：\(todoData.studyUnit)")
                         print("提醒時間為：\(todoData.reminderTime)")
                         print("截止日期為：\(todoData.dueDateTime)")
                         print("事件備註：\(todoData.todoNote ?? "N/A")")
@@ -258,9 +271,10 @@ struct AddStudyView: View {
                                         title: todoTitle,
                                         description: todoIntroduction,
                                         startDateTime: startDateTime,
-                                        isRecurring: isRecurring,
+                                        studyValue: studyValue,
+                                        studyUnit: studyUnit,
+                                        recurringUnit: selectedTimeUnit,
                                         recurringOption: recurringOption,
-                                        selectedFrequency: selectedFrequency,
                                         todoStatus: todoStatus,
                                         dueDateTime: recurringEndDate,
                                         reminderTime: reminderTime,

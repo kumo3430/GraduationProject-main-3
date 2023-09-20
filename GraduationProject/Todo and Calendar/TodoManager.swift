@@ -47,6 +47,10 @@ struct TodoData: Decodable {
     var todoIntroduction: [String]
     var todoLabel: [String?]
     var startDateTime: [String]
+    
+    var studyValue: [String]
+    var studyUnit: [String]
+    
     var frequency: [String]
     var reminderTime: [String]
     var todoStatus: [String?]

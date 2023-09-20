@@ -18,9 +18,13 @@ $todoIntroduction = $data['todoIntroduction'];
 // } else {
 //     $todoLabel= $data['label'];
 // }
-
+$todoLabel= $data['label'];
 $todoStatus= 0;
 $startDateTime = $data['startDateTime'];
+
+$studyValue = $data['studyValue'];
+$studyUnit = $data['studyUnit'];
+
 $reminderTime = $data['reminderTime'];
 $frequency = $data['frequency'];
 $dueDateTime = $data['dueDateTime'];
@@ -44,7 +48,7 @@ if ($conn->connect_error) {
 
 $TodoSELSql = "SELECT * FROM `Todo` WHERE `uid` = '$uid' && `category_id` = '$category_id' && `todoTitle` = '$todoTitle' && `todoIntroduction` = '$todoIntroduction' && `label` = '$todoLabel'&& `todoNote` = '$todoNote';";
 
-function insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime ,$frequency, $reminderTime, $dueDateTime, $todoNote) {
+function insertTodoAndStudyGeneral($conn, $uid, $category_id, $studyValue, $studyUnit, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime ,$frequency, $reminderTime, $dueDateTime, $todoNote) {
     $TodoSql = "INSERT INTO `Todo` (`uid`, `category_id`, `todoTitle`, `todoIntroduction`, `label`, `startDateTime`, `frequency`, `reminderTime`, `todoStatus`, `dueDateTime`, `todoNote`) VALUES ('$uid', '$category_id','$todoTitle','$todoIntroduction','$todoLabel','$startDateTime','$frequency','$reminderTime','0','$dueDateTime','$todoNote')";
     
     if ($conn->query($TodoSql) === TRUE) {
@@ -56,7 +60,7 @@ function insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoI
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $todo_id = $row['id'];
-                $SpacedSql = "INSERT INTO `StudyGeneral` (`todo_id`, `category_id`) VALUES ('$todo_id', '$category_id')";
+                $SpacedSql = "INSERT INTO `StudyGeneral` (`todo_id`, `category_id`, `studyValue`, `studyUnit`) VALUES ('$todo_id', '$category_id', '$studyValue', '$studyUnit')";
 
                 if ($conn->query($SpacedSql) === TRUE) {
                     $message = "User New StudyGeneral successfully";
@@ -99,14 +103,14 @@ if ($result->num_rows == 0) {
     if ($frequency == 0) {
           // 不重複 只新增todo!
         //   $message1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
-        $result1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
+        $result1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $studyValue, $studyUnit, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
         $message1 = $result1['message'];
         $todo_id = $result1['todo_id'];
     
     } else if ($frequency == 1){
         // 每天重複
         // $message1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
-        $result1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
+        $result1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $studyValue, $studyUnit, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
         $message1 = $result1['message'];
         $todo_id = $result1['todo_id'];
 
@@ -116,7 +120,7 @@ if ($result->num_rows == 0) {
     } else if ($frequency == 2){
         // 每週重複
         // $message1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
-        $result1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
+        $result1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $studyValue, $studyUnit, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
         $message1 = $result1['message'];
         $todo_id = $result1['todo_id'];
         $RecurringEndDate = date('Y-m-d', strtotime("$startDateTime +6 day"));
@@ -125,7 +129,7 @@ if ($result->num_rows == 0) {
     } else if ($frequency == 3){
         // 每月重複
         // $message1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
-        $result1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
+        $result1 = insertTodoAndStudyGeneral($conn, $uid, $category_id, $studyValue, $studyUnit, $todoTitle, $todoIntroduction, $todoLabel, $startDateTime, $frequency, $reminderTime, $dueDateTime, $todoNote);
         $message1 = $result1['message'];
         $todo_id = $result1['todo_id'];
         $RecurringEndDate = date('Y-m-d', strtotime("$startDateTime +1 month"));
@@ -144,9 +148,12 @@ $userData = array(
     'todoTitle' => $todoTitle,
     'todoIntroduction' => $todoIntroduction,
     'startDateTime' => $startDateTime,
+    'studyValue' => $studyValue,
+    'studyUnit' => $studyUnit,
     'todoStatus' => $todoStatus,
     'dueDateTime' => $dueDateTime,
     'reminderTime' => $reminderTime,
+    'todoNote' => $todoNote,
     'message' => $message . $message1 . $message2
 );
 echo json_encode($userData);

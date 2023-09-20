@@ -238,7 +238,9 @@ struct YourApp: App {
                         for index in userData.todoTitle.indices {
                             var todoStatus: Bool = false
                             var recurringOption: Int = 0
-                            var isRecurring: Bool = false
+//                            var isRecurring: Bool = false
+                            var recurringUnit: String = ""
+                            var studyUnit: String = ""
                             if let startDate = convertToDate(userData.startDateTime[index]),
                                let dueDateTime = convertToDate(userData.dueDateTime[index]),
                                let reminderTime = convertToTime(userData.reminderTime[index]) {
@@ -250,26 +252,35 @@ struct YourApp: App {
                                 } else {
                                     recurringOption = 1
                                 }
-                                
+                                if (userData.frequency[index] == "1" ){
+                                    recurringUnit = "每日"
+                                } else  if (userData.frequency[index] == "2" ) {
+                                    recurringUnit = "每週"
+                                } else  if (userData.frequency[index] == "3" ) {
+                                    recurringUnit = "每月"
+                                }
+                                if (userData.studyUnit[index] == "0" ){
+                                    studyUnit = "小時"
+                                } else  if (userData.studyUnit[index] == "1" ) {
+                                    studyUnit = "次"
+                                }
                                 if (userData.todoStatus[index] == "0" ){
                                     todoStatus = false
                                 } else {
                                     todoStatus = true
                                 }
-                                if (userData.frequency[index] == "0" ) {
-                                    isRecurring = false
-                                } else {
-                                    isRecurring = true
-                                }
+
                                 let taskId = Int(userData.todo_id[index])
                                 let todo = Todo(id: taskId!,
                                                 label: userData.todoLabel[index]!,
                                                 title: userData.todoTitle[index],
                                                 description: userData.todoIntroduction[index],
                                                 startDateTime: startDate,
-                                                isRecurring: isRecurring,
+                                                studyValue:  Float(userData.studyValue[index])!,
+                                                studyUnit: studyUnit,
+                                                recurringUnit: recurringUnit,
                                                 recurringOption: recurringOption,
-                                                selectedFrequency: Int(userData.frequency[index])!,
+    
                                                 todoStatus: todoStatus,
                                                 dueDateTime: dueDateTime,
                                                 reminderTime: reminderTime,

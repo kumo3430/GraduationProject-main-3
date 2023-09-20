@@ -158,6 +158,7 @@ $userData = array(
     'frequency' => $frequency,
     'dueDateTime' => $dueDateTime,
     'reminderTime' => $reminderTime,
+    'todoNote' => $todoNote,
     'message' => $message . $message1 . $message2
 );
 echo json_encode($userData);
