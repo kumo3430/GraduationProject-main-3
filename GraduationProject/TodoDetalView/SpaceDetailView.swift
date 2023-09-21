@@ -21,25 +21,31 @@ struct SpaceDetailView: View {
     @State var repetition4Status:Int = 0
     @State var message = ""
     @State var isError = false
+//    struct reviseUserData : Decodable {
+//        var userId: String?
+//        var category_id: Int
+//        var todoTitle: String
+//        var todoIntroduction: String
+//        //        var startDateTime: String
+//        var reminderTime: String
+//        var todo_id: Int
+//        //        var repetition1Count: String
+//        var repetition1Status: Int
+//        //        var repetition2Count: String
+//        var repetition2Status: Int
+//        //        var repetition3Count: String
+//        var repetition3Status: Int
+//        //        var repetition4Count: String
+//        var repetition4Status: Int
+//        var message: String
+//    }
+    
     struct reviseUserData : Decodable {
-        var userId: String?
-        var category_id: Int
-        var todoTitle: String
-        var todoIntroduction: String
-        //        var startDateTime: String
-        var reminderTime: String
         var todo_id: Int
-        //        var repetition1Count: String
-        var repetition1Status: Int
-        //        var repetition2Count: String
-        var repetition2Status: Int
-        //        var repetition3Count: String
-        var repetition3Status: Int
-        //        var repetition4Count: String
-        var repetition4Status: Int
+        var label: String
+        var reminderTime: String
         var message: String
     }
-    
     var nextReviewDates: [Date] {
         let intervals = [1, 3, 7, 14]
         return intervals.map { Calendar.current.date(byAdding: .day, value: $0, to: task.nextReviewDate)! }
@@ -48,77 +54,114 @@ struct SpaceDetailView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("標題")) {
-                    TextField("輸入標題", text: $task.title)
-                        .onChange(of: task.title) { newValue in
-                            task.title = newValue
-                            print("New title : \(task.title)")
-                        }
+                Section {
+                    Text(task.title)
+                        .foregroundColor(Color.gray)
+                    Text(task.description)
+                        .foregroundColor(Color.gray)
                 }
-                Section(header: Text("內容")) {
-                    TextField("輸入內容", text: $task.description)
-                        .onChange(of: task.description) { newValue in
-                            task.description = newValue
-                            print("New description : \(task.description)")
-                        }
+                Section {
+                    HStack {
+                        Image(systemName: "tag.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit) // 保持圖示的原始寬高比
+                            .foregroundColor(.white) // 圖示顏色設為白色
+                            .padding(6) // 確保有足夠的空間顯示外框和背景色
+                            .background(Color.yellow) // 設定背景顏色
+                            .clipShape(RoundedRectangle(cornerRadius: 8)) // 設定方形的邊框，並稍微圓角
+                            .frame(width: 30, height: 30) // 這裡的尺寸是示例，您可以根據需要調整
+                        Spacer()
+                        TextField("標籤", text: $task.label)
+                            .onChange(of: task.label) { newValue in
+                                task.label = newValue
+                            }
+                    }
                 }
-                
-                Section(header: Text("提醒時間")) {
-                    DatePicker("開始時間", selection: $task.nextReviewDate, displayedComponents: [.date])
-                        .disabled(true)
-                    DatePicker("提醒時間", selection: $task.nextReviewTime, displayedComponents: [.hourAndMinute])
-                        .onChange(of: task.nextReviewTime) { newValue in
-                            task.nextReviewTime = newValue
-                            print("New nextReviewTime : \(task.nextReviewTime)")
-                        }
+                Section {
+                    HStack {
+                        Image(systemName: "calendar")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(Color.orange)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .frame(width: 30, height: 30)
+                        Text("選擇時間")
+                        Spacer()
+                        Text(formattedDate(task.nextReviewDate))
+                            .foregroundColor(Color.gray)
+                    }
+                    HStack {
+                        Image(systemName: "bell.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(Color.purple)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .frame(width: 30, height: 30)
+                        DatePicker("提醒時間", selection: $task.nextReviewTime, displayedComponents: [.hourAndMinute])
+                            .onChange(of: task.nextReviewTime) { newValue in
+                                task.nextReviewTime = newValue
+                            }
+                        
+                    }
                 }
-                
-                Section(header: Text("間隔學習法日程表")) {
-                    VStack {
-                        HStack{
-                            Toggle(isOn: $task.isReviewChecked0) {
-                                Text("第\(formattedInterval(0))天： \(formattedDate(nextReviewDates[0]))")
-                            }
-                            .onChange(of: task.isReviewChecked0) { newValue in
-                                task.isReviewChecked0 = newValue
-                                print("New ReviewChecked0 : \(task.isReviewChecked0)")
-                            }
-                        }
-                        HStack{
-                            Toggle(isOn: $task.isReviewChecked1) {
-                                Text("第\(formattedInterval(1))天： \(formattedDate(nextReviewDates[1]))")
-                            }
-                            .onChange(of: task.isReviewChecked1) { newValue in
-                                task.isReviewChecked1 = newValue
-                                print("New ReviewChecked1 : \(task.isReviewChecked1)")
-                            }
-                        }
-                        HStack{
-                            Toggle(isOn: $task.isReviewChecked2) {
-                                Text("第\(formattedInterval(2))天： \(formattedDate(nextReviewDates[2]))")
-                            }
-                            .onChange(of: task.isReviewChecked2) { newValue in
-                                task.isReviewChecked2 = newValue
-                                print("New ReviewChecked2 : \(task.isReviewChecked2)")
-                            }
-                        }
-                        HStack{
-                            Toggle(isOn: $task.isReviewChecked3) {
-                                Text("第\(formattedInterval(3))天： \(formattedDate(nextReviewDates[3]))")
-                            }
-                            .onChange(of: task.isReviewChecked3) { newValue in
-                                task.isReviewChecked3 = newValue
-                                print("New ReviewChecked3 : \( task.isReviewChecked3)")
-                            }
+                Section {
+                    ForEach(0..<4) { index in
+                        HStack {
+                            Text("第\(formattedInterval(index))天： \(formattedDate(nextReviewDates[index]))")
                         }
                     }
                 }
+                
+//                Section(header: Text("間隔學習法日程表")) {
+//                    VStack {
+//                        HStack{
+//                            Toggle(isOn: $task.isReviewChecked0) {
+//                                Text("第\(formattedInterval(0))天： \(formattedDate(nextReviewDates[0]))")
+//                            }
+//                            .onChange(of: task.isReviewChecked0) { newValue in
+//                                task.isReviewChecked0 = newValue
+//                                print("New ReviewChecked0 : \(task.isReviewChecked0)")
+//                            }
+//                        }
+//                        HStack{
+//                            Toggle(isOn: $task.isReviewChecked1) {
+//                                Text("第\(formattedInterval(1))天： \(formattedDate(nextReviewDates[1]))")
+//                            }
+//                            .onChange(of: task.isReviewChecked1) { newValue in
+//                                task.isReviewChecked1 = newValue
+//                                print("New ReviewChecked1 : \(task.isReviewChecked1)")
+//                            }
+//                        }
+//                        HStack{
+//                            Toggle(isOn: $task.isReviewChecked2) {
+//                                Text("第\(formattedInterval(2))天： \(formattedDate(nextReviewDates[2]))")
+//                            }
+//                            .onChange(of: task.isReviewChecked2) { newValue in
+//                                task.isReviewChecked2 = newValue
+//                                print("New ReviewChecked2 : \(task.isReviewChecked2)")
+//                            }
+//                        }
+//                        HStack{
+//                            Toggle(isOn: $task.isReviewChecked3) {
+//                                Text("第\(formattedInterval(3))天： \(formattedDate(nextReviewDates[3]))")
+//                            }
+//                            .onChange(of: task.isReviewChecked3) { newValue in
+//                                task.isReviewChecked3 = newValue
+//                                print("New ReviewChecked3 : \( task.isReviewChecked3)")
+//                            }
+//                        }
+//                    }
+//                }
                 //                Text(messenge)
                 //                    .foregroundColor(.red)
             }
             Text(message)
                 .foregroundColor(.red)
-                .navigationTitle("任務")
+                .navigationTitle("間隔學習修改")
                 .navigationBarItems(
                     trailing: Button("完成", action: reviseStudySpaced)
                 )
@@ -127,10 +170,10 @@ struct SpaceDetailView: View {
             task.title = task.title
             task.description = task.description
             task.nextReviewTime = task.nextReviewTime
-            task.isReviewChecked0 = task.isReviewChecked0
-            task.isReviewChecked1 = task.isReviewChecked1
-            task.isReviewChecked2 = task.isReviewChecked2
-            task.isReviewChecked3 = task.isReviewChecked3
+//            task.isReviewChecked0 = task.isReviewChecked0
+//            task.isReviewChecked1 = task.isReviewChecked1
+//            task.isReviewChecked2 = task.isReviewChecked2
+//            task.isReviewChecked3 = task.isReviewChecked3
         }
         //        .navigationBarTitle("任務")
         //        .navigationTitle("任務")
@@ -193,13 +236,16 @@ struct SpaceDetailView: View {
                 session = URLSession(configuration: config)
             }
         }
-        
-        let url = URL(string: "http://localhost:8888/reviseStudySpaced.php")!
+        let url = URL(string: "http://127.0.0.1:8888/reviseTask/reviseSpace.php")!
+//        let url = URL(string: "http://127.0.0.1:8888/reviseTask/reviseStudySpaced.php")!
         //        let url = URL(string: "http://10.21.1.164:8888/account/register.php")!
         var request = URLRequest(url: url)
         //        request.cachePolicy = .reloadIgnoringLocalCacheData
         request.httpMethod = "POST"
-        let body = ["id":  task.id,"title": task.title, "description": task.description,"nextReviewTime": formattedTime(task.nextReviewTime),"repetition1Status": repetition1Status,"repetition2Status":repetition2Status,"repetition3Status": repetition3Status,"repetition4Status": repetition4Status ] as [String : Any]
+//        let body = ["id":  task.id,"title": task.title, "description": task.description,"nextReviewTime": formattedTime(task.nextReviewTime),"repetition1Status": repetition1Status,"repetition2Status":repetition2Status,"repetition3Status": repetition3Status,"repetition4Status": repetition4Status ] as [String : Any]
+        let body = [ "id": task.id,
+                     "label": task.label,
+                     "reminderTime": formattedTime(task.nextReviewTime)] as [String : Any]
         print("reviseStudySpaced - body:\(body)")
         let jsonData = try! JSONSerialization.data(withJSONObject: body, options: [])
         request.httpBody = jsonData
@@ -215,26 +261,29 @@ struct SpaceDetailView: View {
                     //                    確認api會印出的所有內容
                     print(String(data: data, encoding: .utf8)!)
                     let userData = try decoder.decode(reviseUserData.self, from: data)
-                    if (userData.message == "User revise Todo successfully") {
+                    if (userData.message == "User revise Space successfully") {
                         print("============== verifyView ==============")
                         print(String(data: data, encoding: .utf8)!)
                         print("reviseStudySpaced - userDate:\(userData)")
-                        print("使用者ID為：\(userData.userId ?? "N/A")")
+//                        print("使用者ID為：\(userData.userId ?? "N/A")")
+//                        print("事件id為：\(userData.todo_id)")
+//                        print("事件種類為：\(userData.category_id)")
+//                        print("事件名稱為：\(userData.todoTitle)")
+//                        print("事件簡介為：\(userData.todoIntroduction)")
+//                        //                        print("開始時間為：\(userData.startDateTime)")
+//                        print("提醒時間為：\(userData.reminderTime)")
+//                        print("事件編號為：\(userData.todo_id)")
+//                        //                        print("第一次間隔重複時間為：\(userData.repetition1Count)")
+//                        print("第一次間隔重複狀態為：\(userData.repetition1Status)")
+//                        //                        print("第二次間隔重複時間為：\(userData.repetition2Count)")
+//                        print("第二次間隔重複狀態為：\(userData.repetition2Status)")
+//                        //                        print("第三次間隔重複時間為：\(userData.repetition3Count)")
+//                        print("第三次間隔重複狀態為：\(userData.repetition3Status)")
+//                        //                        print("第四次間隔重複時間為：\(userData.repetition4Count)")
+//                        print("第四次間隔重複狀態為：\(userData.repetition4Status)")
                         print("事件id為：\(userData.todo_id)")
-                        print("事件種類為：\(userData.category_id)")
-                        print("事件名稱為：\(userData.todoTitle)")
-                        print("事件簡介為：\(userData.todoIntroduction)")
-                        //                        print("開始時間為：\(userData.startDateTime)")
+                        print("事件種類為：\(userData.label)")
                         print("提醒時間為：\(userData.reminderTime)")
-                        print("事件編號為：\(userData.todo_id)")
-                        //                        print("第一次間隔重複時間為：\(userData.repetition1Count)")
-                        print("第一次間隔重複狀態為：\(userData.repetition1Status)")
-                        //                        print("第二次間隔重複時間為：\(userData.repetition2Count)")
-                        print("第二次間隔重複狀態為：\(userData.repetition2Status)")
-                        //                        print("第三次間隔重複時間為：\(userData.repetition3Count)")
-                        print("第三次間隔重複狀態為：\(userData.repetition3Status)")
-                        //                        print("第四次間隔重複時間為：\(userData.repetition4Count)")
-                        print("第四次間隔重複狀態為：\(userData.repetition4Status)")
                         print("reviseStudySpaced - message：\(userData.message)")
                         DispatchQueue.main.async {
                             isError = false

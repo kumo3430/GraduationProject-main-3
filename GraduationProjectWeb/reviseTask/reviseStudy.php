@@ -9,6 +9,7 @@ $uid = $_SESSION['uid'];
 $todo_id = $data['id'];
 $label = $data['label'];
 $reminderTime = $data['reminderTime'];
+$dueDateTime = $data['dueDateTime'];
 $todoNote = $data['todoNote'];
 $message = "";
 
@@ -25,7 +26,7 @@ if ($conn->connect_error) {
 }
 
 $TodoSql = "UPDATE Todo 
-SET `label` = '$label',`reminderTime` = '$reminderTime',`todoNote` = '$todoNote'
+SET `label` = '$label',`reminderTime` = '$reminderTime',`dueDateTime` = '$dueDateTime',`todoNote` = '$todoNote'
 WHERE `id` = '$todo_id' ;";
 
 if ($conn->query($TodoSql) === TRUE) {
@@ -39,6 +40,7 @@ $userData = array(
     'todo_id' => $todo_id,
     'label' => $label,
     'reminderTime' => $reminderTime,
+    'dueDateTime' => $dueDateTime,
     'todoNote' => $todoNote,
     'message' => $message
 );

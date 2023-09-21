@@ -11,6 +11,7 @@ struct TodoListView: View {
     @EnvironmentObject var taskStore: TaskStore
     @EnvironmentObject var todoStore: TodoStore
     @EnvironmentObject var sportStore: SportStore
+    @EnvironmentObject var dietStore: DietStore
     @AppStorage("uid") private var uid: String = ""
     @State private var showingActionSheet = false
     @State private var action: Action? = nil
@@ -72,6 +73,19 @@ struct TodoListView: View {
                                     Text(sportStore.sports[index].description)
                                         .font(.subheadline)
                                     Text("Start time: \(formattedDate(sportStore.sports[index].startDateTime))")
+                                        .font(.caption)
+                                }
+                            }
+                        }
+                        Text("飲食")
+                        ForEach(dietStore.diets.indices, id: \.self) { index in
+                            NavigationLink(destination: DietDetailView(diet: $dietStore.diets[index])) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(dietStore.diets[index].title)
+                                        .font(.headline)
+                                    Text(dietStore.diets[index].description)
+                                        .font(.subheadline)
+                                    Text("Start time: \(formattedDate(dietStore.diets[index].startDateTime))")
                                         .font(.caption)
                                 }
                             }
