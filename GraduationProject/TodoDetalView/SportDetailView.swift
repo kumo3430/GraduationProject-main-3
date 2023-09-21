@@ -137,13 +137,7 @@ struct DetailSportView: View {
                     }
             }
             .navigationBarTitle("運動修改")
-            .navigationBarItems(leading:
-                                    Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }) {
-                Text("返回")
-                    .foregroundColor(.blue)
-            },
+            .navigationBarItems(
                                 trailing:  Button(action: {
                 reviseSport()
                 if sport.label == "" {
