@@ -181,7 +181,7 @@ struct CalendarView: View {
 //                    ModernEventRow(eventTitle: todo.title, eventSubtitle: "開始時間: \(formattedDate(todo.startDateTime))", icon: "book")
 //                                        ModernEventRow(eventTitle: todo.title, eventSubtitle: todo.description, icon: "calendar")
 //                    ModernEventRow(eventTitle: todo.title, eventSubtitle: todo.description, icon: "calendar")
-                    ModernEventRow(eventTitle: todo.title, eventSubtitle: "", eventRecurringUnit: todo.recurringUnit, eventValue:String(todo.studyValue), eventUnit: todo.studyUnit, eventSelectType: "", icon: "calendar")
+                    ModernEventRow(eventTitle: todo.title, eventSubtitle: "", eventRecurringUnit: todo.recurringUnit, eventValue:String(todo.studyValue), eventUnit: todo.studyUnit, eventSelectType: "", icon: "book")
                 }
             }
 
@@ -193,7 +193,7 @@ struct CalendarView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(filteredSports) { sport in
 //                    ModernEventRow(eventTitle: sport.title, eventSubtitle: "開始時間: \(formattedDate(sport.startDateTime))", icon: "figure.walk")
-                    ModernEventRow(eventTitle: sport.title, eventSubtitle: sport.description, eventRecurringUnit: sport.recurringUnit, eventValue: String(sport.sportValue), eventUnit: sport.sportUnits, eventSelectType: sport.selectedSport, icon: "calendar")
+                    ModernEventRow(eventTitle: sport.title, eventSubtitle: sport.description, eventRecurringUnit: sport.recurringUnit, eventValue: String(sport.sportValue), eventUnit: sport.sportUnits, eventSelectType: sport.selectedSport, icon: "figure.walk")
                 }
             }
             
@@ -205,7 +205,7 @@ struct CalendarView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(filteredDiets) { diet in
 //                    ModernEventRow(eventTitle: diet.title, eventSubtitle: "開始時間: \(formattedDate(diet.startDateTime))", icon: "fork.knife")
-                    ModernEventRow(eventTitle: diet.title, eventSubtitle: diet.description, eventRecurringUnit: diet.recurringUnit, eventValue: String(diet.dietsValue), eventUnit: "", eventSelectType: diet.selectedDiets, icon: "calendar")
+                    ModernEventRow(eventTitle: diet.title, eventSubtitle: diet.description, eventRecurringUnit: diet.recurringUnit, eventValue: String(diet.dietsValue), eventUnit: "", eventSelectType: diet.selectedDiets, icon: "fork.knife")
                 }
             }
         }
