@@ -165,8 +165,6 @@ struct CalendarView: View {
                     .padding(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(filteredTasks) { task in
-//                    ModernEventRow(eventTitle: task.title, eventSubtitle: "設定日期: \(formattedDate(task.nextReviewDate))", icon: "calendar")
-//                    ModernEventRow(eventTitle: task.title, eventSubtitle: task.description, icon: "calendar")
                     ModernEventRow(eventTitle: task.title, eventSubtitle: task.description, eventRecurringUnit: "", eventValue: "", eventUnit: "", eventSelectType: "", icon: "calendar")
                 }
             }
@@ -178,9 +176,6 @@ struct CalendarView: View {
                     .padding(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(filteredTodos) { todo in
-//                    ModernEventRow(eventTitle: todo.title, eventSubtitle: "開始時間: \(formattedDate(todo.startDateTime))", icon: "book")
-//                                        ModernEventRow(eventTitle: todo.title, eventSubtitle: todo.description, icon: "calendar")
-//                    ModernEventRow(eventTitle: todo.title, eventSubtitle: todo.description, icon: "calendar")
                     ModernEventRow(eventTitle: todo.title, eventSubtitle: "", eventRecurringUnit: todo.recurringUnit, eventValue:String(todo.studyValue), eventUnit: todo.studyUnit, eventSelectType: "", icon: "book")
                 }
             }
@@ -192,7 +187,6 @@ struct CalendarView: View {
                     .padding(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(filteredSports) { sport in
-//                    ModernEventRow(eventTitle: sport.title, eventSubtitle: "開始時間: \(formattedDate(sport.startDateTime))", icon: "figure.walk")
                     ModernEventRow(eventTitle: sport.title, eventSubtitle: sport.description, eventRecurringUnit: sport.recurringUnit, eventValue: String(sport.sportValue), eventUnit: sport.sportUnits, eventSelectType: sport.selectedSport, icon: "figure.walk")
                 }
             }
@@ -204,7 +198,6 @@ struct CalendarView: View {
                     .padding(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(filteredDiets) { diet in
-//                    ModernEventRow(eventTitle: diet.title, eventSubtitle: "開始時間: \(formattedDate(diet.startDateTime))", icon: "fork.knife")
                     ModernEventRow(eventTitle: diet.title, eventSubtitle: diet.description, eventRecurringUnit: diet.recurringUnit, eventValue: String(diet.dietsValue), eventUnit: "", eventSelectType: diet.selectedDiets, icon: "fork.knife")
                 }
             }
@@ -249,70 +242,90 @@ struct CalendarView: View {
                         .font(.headline)
                         .multilineTextAlignment(.leading)
                         .frame(minWidth: 250)
-                    // 間隔
-                    if (eventRecurringUnit.isEmpty) {
-                        Text(eventSubtitle)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                            .multilineTextAlignment(.leading)
-                            .frame(minWidth: 250)
-                      
-                    } else {
-                        // 學習 運動
-                        if (eventUnit.isEmpty) {
-                            Text(eventRecurringUnit)
+                    
+                    HStack {
+                        // 間隔
+                        if (eventRecurringUnit.isEmpty) {
+                            Text(eventSubtitle)
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
-                                .multilineTextAlignment(.leading)
-                                .frame(minWidth: 250)
-                            if (!eventSelectType.isEmpty) {
-                                Text(eventSelectType)
+//                                .multilineTextAlignment(.leading)
+//                                .frame(minWidth: 250)
+                            
+                        } else {
+                            // 學習 運動
+                            if (eventSelectType.isEmpty) {
+                                // 一般學習
+                                Text(eventRecurringUnit)
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
-                                    .multilineTextAlignment(.leading)
-                                    .frame(minWidth: 250)
-                            }
-                            Text(eventValue)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                                .multilineTextAlignment(.leading)
-                                .frame(minWidth: 250)
-                            Text(eventUnit)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                                .multilineTextAlignment(.leading)
-                                .frame(minWidth: 250)
-                        } else {
-                            // 飲食
-                            HStack {
-                                Text(eventRecurringUnit)
-                                    .foregroundColor(Color.gray)
-                                Text(eventSelectType)
-                                    .foregroundColor(Color.gray)
-                               
-                                if let preText = dietsPreTextByType[eventSelectType] {
-                                    Text(preText)
-                                        .font(.subheadline)
-                                        .foregroundColor(Color.gray)
-                                } else {
-                                    Text("少於")
-                                        .font(.subheadline)
-                                        .foregroundColor(Color.gray)
-                                }
+//                                    .multilineTextAlignment(.leading)
+//                                    .frame(minWidth: 250)
                                 Text(eventValue)
-                                    .foregroundColor(Color.gray)
-                                if let primaryUnits = dietsUnitsByType[eventSelectType] {
-                                    Text(primaryUnits.first!)
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+//                                    .multilineTextAlignment(.leading)
+//                                    .frame(minWidth: 250)
+                                Text(eventUnit)
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+//                                    .multilineTextAlignment(.leading)
+//                                    .frame(minWidth: 250)
+                            } else {
+                                if (!eventUnit.isEmpty) {
+                                    // 運動
+                                    Text(eventSelectType)
                                         .font(.subheadline)
-                                        .foregroundColor(Color.gray)
+                                        .foregroundColor(.gray)
+//                                        .multilineTextAlignment(.leading)
+//                                        .frame(minWidth: 250)
+                                    Text(eventRecurringUnit)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+//                                        .multilineTextAlignment(.leading)
+//                                        .frame(minWidth: 250)
+                                    Text(eventValue)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+//                                        .multilineTextAlignment(.leading)
+//                                        .frame(minWidth: 250)
+                                    Text(eventUnit)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+//                                        .multilineTextAlignment(.leading)
+//                                        .frame(minWidth: 250)
                                 } else {
-                                    Text("次")
-                                        .font(.subheadline)
+                                    // 飲食
+                                    Text(eventSelectType)
                                         .foregroundColor(Color.gray)
+                                    Text(eventRecurringUnit)
+                                        .foregroundColor(Color.gray)
+
+                                    if let preText = dietsPreTextByType[eventSelectType] {
+                                        Text(preText)
+                                            .font(.subheadline)
+                                            .foregroundColor(Color.gray)
+                                    } else {
+                                        Text("少於")
+                                            .font(.subheadline)
+                                            .foregroundColor(Color.gray)
+                                    }
+                                    Text(eventValue)
+                                        .foregroundColor(Color.gray)
+                                    if let primaryUnits = dietsUnitsByType[eventSelectType] {
+                                        Text(primaryUnits.first!)
+                                            .font(.subheadline)
+                                            .foregroundColor(Color.gray)
+                                    } else {
+                                        Text("次")
+                                            .font(.subheadline)
+                                            .foregroundColor(Color.gray)
+                                    }
                                 }
                             }
                         }
                     }
+                    
                 }
             }
             .padding()
